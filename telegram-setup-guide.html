@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Setup - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0099ff 0%, #667eea 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0099ff 0%, #667eea 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 20px 0 0 0;
+        }
+
+        .progress-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-dot.active {
+            background: white;
+            width: 20px;
+            border-radius: 3px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            min-height: 500px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .diagram {
+            background: #f0f7ff;
+            border: 2px dashed #0099ff;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .diagram-icon {
+            font-size: 64px;
+            margin: 20px 0;
+        }
+
+        .diagram-text {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0099ff 0%, #667eea 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,153,255,0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            border-left: 4px solid #0099ff;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .checklist h4 {
+            color: #0099ff;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .checklist ol {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #555;
+            line-height: 2;
+        }
+
+        .input-field {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            margin: 12px 0;
+            font-family: monospace;
+        }
+
+        .status-box {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status-box h3 {
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+
+        .status-box p {
+            color: #16a34a;
+        }
+
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .copy-btn {
+            width: 100%;
+            background: #0099ff;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #0077cc;
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Telegram Bot Setup</h1>
+            <p>Get your bot token in 5 minutes</p>
+            <div class="progress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: Welcome -->
+            <div class="step active">
+                <div class="emoji">👋</div>
+                <h2>Welcome!</h2>
+                <p>We'll get your Telegram bot token in just 5 minutes.</p>
+                <p>No coding needed — just follow these simple steps!</p>
+
+                <div class="checklist">
+                    <h4>What you'll do:</h4>
+                    <ol>
+                        <li>Open Telegram</li>
+                        <li>Find @BotFather</li>
+                        <li>Create a new bot</li>
+                        <li>Copy your token</li>
+                        <li>Paste it back to the setup wizard</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="nextStep()">Let's Start →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Open Telegram -->
+            <div class="step">
+                <div class="emoji">📲</div>
+                <h2>Step 1: Open Telegram</h2>
+                <p>First, download and open Telegram if you don't have it.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">📲</div>
+                    <div class="diagram-text">
+                        Download from:<br>
+                        <strong>telegram.org</strong>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;">If you already have Telegram, just open the app.</p>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Search BotFather -->
+            <div class="step">
+                <div class="emoji">🤖</div>
+                <h2>Step 2: Find @BotFather</h2>
+                <p>In Telegram, use the search bar to find BotFather.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">🔍</div>
+                    <div class="diagram-text">
+                        Click the search icon<br>
+                        Type: <strong>@BotFather</strong><br>
+                        Click the official result (has ✓ checkmark)
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <h4>How to find search:</h4>
+                    <ol>
+                        <li>Look for the magnifying glass 🔍 icon</li>
+                        <li>It's usually at the top or bottom of the app</li>
+                        <li>Type @BotFather</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Create Bot -->
+            <div class="step">
+                <div class="emoji">✨</div>
+                <h2>Step 3: Create Your Bot</h2>
+                <p>In the BotFather chat, send the command to create a new bot.</p>
+
+                <div class="code-block">/newbot</div>
+                <button class="copy-btn" onclick="copyToClipboard(this, '/newbot')">📋 Copy Command</button>
+
+                <div class="diagram">
+                    <div class="diagram-icon">💬</div>
+                    <div class="diagram-text">
+                        Send this message in the BotFather chat<br>
+                        (just paste & press send)
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>What happens next:</strong></p>
+                <div class="checklist">
+                    <ol>
+                        <li>BotFather asks: "What's your bot's name?"</li>
+                        <li>Reply with your agent's name (e.g., "Sales Bot")</li>
+                        <li>BotFather asks: "What's your bot's username?"</li>
+                        <li>Reply with something like: "my_sales_bot_123" (must end with 'bot')</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Get Token -->
+            <div class="step">
+                <div class="emoji">🔑</div>
+                <h2>Step 4: Copy Your Token</h2>
+                <p>BotFather will send you your bot token.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">📋</div>
+                    <div class="diagram-text">
+                        Look for the message from BotFather<br>
+                        It says: <strong>"Token: "</strong><br>
+                        Followed by a long code
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;">The token looks like:</p>
+                <div class="code-block">123456789:ABCDEFGHIjklmnopqrstuvwxyz</div>
+
+                <div class="checklist">
+                    <h4>Important:</h4>
+                    <ol>
+                        <li>✅ Do: Copy this exact token</li>
+                        <li>✅ Do: Keep it safe</li>
+                        <li>❌ Don't: Share it with anyone</li>
+                        <li>❌ Don't: Post it online</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Got It, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Paste Token -->
+            <div class="step">
+                <div class="emoji">✅</div>
+                <h2>Step 5: Paste Your Token</h2>
+                <p>Go back to the setup wizard and paste your token here:</p>
+
+                <div class="checklist">
+                    <h4>When the setup wizard asks:</h4>
+                    <ol>
+                        <li>"Paste your Telegram bot token:"</li>
+                        <li>Paste the token you copied from BotFather</li>
+                        <li>Press Enter</li>
+                        <li>Continue with the wizard</li>
+                    </ol>
+                </div>
+
+                <div class="status-box">
+                    <h3>✓ You're Done!</h3>
+                    <p>Your bot token is ready. Go back to the setup wizard and continue!</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="window.history.back()">← Back to Setup Wizard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll('.step');
+        const progressDots = document.querySelectorAll('.progress-dot');
+
+        function showStep(n) {
+            steps.forEach(s => s.classList.remove('active'));
+            steps[n].classList.add('active');
+            
+            progressDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i <= n);
+            });
+
+            currentStep = n;
+            window.scrollTo(0, 0);
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function copyToClipboard(btn, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const oldText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = oldText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

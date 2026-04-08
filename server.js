@@ -13,12 +13,19 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'setup-wizard.html'));
 });
 
+// Serve interactive channel setup guides
+app.get('/setup/:channel', (req, res) => {
+    const channel = req.params.channel.toLowerCase();
+    const file = channel + '-setup-guide.html';
+    res.sendFile(path.join(__dirname, file));
+});
+
 // Serve API keys guide
 app.get('/api-keys', (req, res) => {
     res.sendFile(path.join(__dirname, 'docs', 'API-KEYS.md'));
 });
 
-// Serve channel guides
+// Serve markdown channel guides
 app.get('/guides/:channel', (req, res) => {
     const channel = req.params.channel.toUpperCase();
     res.sendFile(path.join(__dirname, 'docs', 'channel-guides', `${channel}.md`));
