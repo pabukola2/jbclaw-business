@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Setup - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 20px 0 0 0;
+        }
+
+        .progress-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-dot.active {
+            background: white;
+            width: 20px;
+            border-radius: 3px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            min-height: 500px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .diagram {
+            background: #f0f4ff;
+            border: 2px dashed #5865f2;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .diagram-icon {
+            font-size: 64px;
+            margin: 20px 0;
+        }
+
+        .diagram-text {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(88,101,242,0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            border-left: 4px solid #5865f2;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .checklist h4 {
+            color: #5865f2;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .checklist ol {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #555;
+            line-height: 2;
+        }
+
+        .status-box {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status-box h3 {
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+
+        .status-box p {
+            color: #16a34a;
+        }
+
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .link-button {
+            background: #5865f2;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        .copy-btn {
+            width: 100%;
+            background: #5865f2;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #4752c4;
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Discord Bot Setup</h1>
+            <p>Get your bot token in 5 minutes</p>
+            <div class="progress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: Welcome -->
+            <div class="step active">
+                <div class="emoji">👋</div>
+                <h2>Welcome!</h2>
+                <p>We'll get your Discord bot token in just 5 minutes.</p>
+
+                <div class="checklist">
+                    <h4>What you'll do:</h4>
+                    <ol>
+                        <li>Go to Discord Developer Portal</li>
+                        <li>Create a new application</li>
+                        <li>Add a bot to it</li>
+                        <li>Copy your token</li>
+                        <li>Paste it back to the setup wizard</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="nextStep()">Let's Start →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Go to Developer Portal -->
+            <div class="step">
+                <div class="emoji">🔧</div>
+                <h2>Step 1: Open Developer Portal</h2>
+                <p>Click the link below to open Discord Developer Portal:</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">🌐</div>
+                    <a href="https://discord.com/developers/applications" target="_blank" class="link-button">
+                        Open Discord Developer Portal
+                    </a>
+                </div>
+
+                <p style="margin-top: 20px;">Or go to: <span style="font-family: monospace; background: #f5f5f5; padding: 2px 4px;">discord.com/developers/applications</span></p>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Create Application -->
+            <div class="step">
+                <div class="emoji">✨</div>
+                <h2>Step 2: Create Application</h2>
+                <p>In Developer Portal, create a new application for your bot.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">📋</div>
+                    <div class="diagram-text">
+                        Click: <strong>"New Application"</strong><br>
+                        Enter your agent's name<br>
+                        Click: <strong>"Create"</strong>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <h4>Example names:</h4>
+                    <ol>
+                        <li>Sales Bot</li>
+                        <li>Support Hero</li>
+                        <li>My AI Assistant</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Add Bot -->
+            <div class="step">
+                <div class="emoji">🤖</div>
+                <h2>Step 3: Add Bot</h2>
+                <p>In your application, add a bot.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">🎮</div>
+                    <div class="diagram-text">
+                        Click: <strong>"Bot"</strong> (left sidebar)<br>
+                        Click: <strong>"Add Bot"</strong><br>
+                        Confirm when asked
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Copy Token -->
+            <div class="step">
+                <div class="emoji">🔑</div>
+                <h2>Step 4: Copy Bot Token</h2>
+                <p>Now you'll see your bot token.</p>
+
+                <div class="diagram">
+                    <div class="diagram-icon">📋</div>
+                    <div class="diagram-text">
+                        Under <strong>"TOKEN"</strong> section<br>
+                        Click: <strong>"Copy"</strong><br>
+                        (or click the token to copy it)
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <h4>Important:</h4>
+                    <ol>
+                        <li>✅ Keep this token secret</li>
+                        <li>✅ Don't share it with anyone</li>
+                        <li>❌ Don't post it online</li>
+                    </ol>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Got It, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Permissions -->
+            <div class="step">
+                <div class="emoji">⚙️</div>
+                <h2>Step 5: Set Permissions</h2>
+                <p>You need to set permissions for your bot.</p>
+
+                <div class="checklist">
+                    <h4>In Developer Portal:</h4>
+                    <ol>
+                        <li>Click <strong>"OAuth2"</strong> (left sidebar)</li>
+                        <li>Click <strong>"URL Generator"</strong></li>
+                        <li>Under Scopes, check: <strong>"bot"</strong></li>
+                        <li>Under Permissions, check: <strong>"Send Messages"</strong>, <strong>"Read Messages"</strong></li>
+                        <li>Copy the generated URL at bottom</li>
+                        <li>Open the URL in browser</li>
+                        <li>Select your Discord server</li>
+                        <li>Click <strong>"Authorize"</strong></li>
+                    </ol>
+                </div>
+
+                <p style="margin-top: 20px;">Your bot is now in your Discord server!</p>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done, Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 7: Paste Token -->
+            <div class="step">
+                <div class="emoji">✅</div>
+                <h2>Step 6: Paste Your Token</h2>
+                <p>Go back to the setup wizard and paste your token.</p>
+
+                <div class="checklist">
+                    <h4>When the setup wizard asks:</h4>
+                    <ol>
+                        <li>"Paste your Discord bot token:"</li>
+                        <li>Paste the token you copied</li>
+                        <li>Press Enter</li>
+                        <li>Continue with the wizard</li>
+                    </ol>
+                </div>
+
+                <div class="status-box">
+                    <h3>✓ You're Done!</h3>
+                    <p>Your bot token is ready. Go back to the setup wizard and continue!</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="window.history.back()">← Back to Setup Wizard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll('.step');
+        const progressDots = document.querySelectorAll('.progress-dot');
+
+        function showStep(n) {
+            steps.forEach(s => s.classList.remove('active'));
+            steps[n].classList.add('active');
+            
+            progressDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i <= n);
+            });
+
+            currentStep = n;
+            window.scrollTo(0, 0);
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                showStep(currentStep - 1);
+            }
+        }
+    </script>
+</body>
+</html>
