@@ -1,0 +1,25 @@
+# System
+.openclaw/
+node_modules/
+.env
+*.log
+.DS_Store
+
+# Media (too large)
+*.mp4
+*.webm
+*.mkv
+*.mp3
+*.jpg
+*.png
+
+# Build artifacts
+*.pyc
+__pycache__/
+dist/
+build/
+
+# Secrets
+*.enc
+.env.local
+openclaw.json
