@@ -5,748 +5,283 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JB Claw Business - Setup Wizard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .progress {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-
-        .progress-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .progress-dot.active {
-            background: white;
-            width: 24px;
-            border-radius: 4px;
-        }
-
-        .content {
-            padding: 40px 30px;
-            min-height: 450px;
-        }
-
-        .step {
-            display: none;
-        }
-
-        .step.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .step p {
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .code-block {
-            background: #1e1e1e;
-            color: #00ff00;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 16px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            overflow-x: auto;
-            margin: 16px 0;
-            line-height: 1.6;
-            word-break: break-all;
-        }
-
-        .copy-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .copy-btn:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-        }
-
-        .copy-btn.copied {
-            background: #22c55e;
-        }
-
-        .diagram {
-            background: #f5f5f5;
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .diagram-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .diagram-icon {
-            font-size: 48px;
-            margin: 12px 0;
-        }
-
-        .step-indicator {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 12px;
-            border-radius: 4px;
-            margin: 16px 0;
-            font-size: 13px;
-            color: #555;
-        }
-
-        .step-number {
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .option {
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .option:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-
-        .option.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
-
-        .option input[type="radio"] {
-            margin-right: 12px;
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .option-text {
-            flex: 1;
-        }
-
-        .option-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .option-desc {
-            font-size: 13px;
-            color: #999;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        button {
-            flex: 1;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            flex: 2;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .emoji {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .success-check {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background: #22c55e;
-            border-radius: 50%;
-            color: white;
-            text-align: center;
-            line-height: 24px;
-            margin-right: 8px;
-            font-size: 14px;
-        }
-
-        .checklist {
-            list-style: none;
-            margin: 16px 0;
-        }
-
-        .checklist li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .checklist li:last-child {
-            border-bottom: none;
-        }
-
-        .status-box {
-            background: #f0fdf4;
-            border: 2px solid #22c55e;
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .status-box h3 {
-            color: #22c55e;
-            margin-bottom: 8px;
-        }
-
-        .status-box p {
-            color: #16a34a;
-            font-size: 13px;
-        }
-
-        .highlight {
-            background: #fff3cd;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 12px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 600px; width: 100%; overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .content { padding: 40px 30px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        h2 { font-size: 24px; margin-bottom: 20px; color: #333; }
+        p { color: #666; margin-bottom: 15px; line-height: 1.6; font-size: 14px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 13px; }
+        input, textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 13px; font-family: inherit; }
+        input:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .btn-group { display: flex; gap: 12px; margin-top: 30px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; flex: 2; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102,126,234,0.3); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #e0e0e0; }
+        .box { padding: 16px; border-radius: 8px; margin: 16px 0; font-size: 13px; }
+        .info-box { background: #f0f4ff; border-left: 4px solid #667eea; color: #555; }
+        .success-box { background: #f0fdf4; border-left: 4px solid #22c55e; color: #166534; }
+        .warning-box { background: #fffbf0; border-left: 4px solid #f59e0b; color: #92400e; }
+        .link-btn { background: #667eea; color: white; padding: 10px 16px; border-radius: 6px; text-decoration: none; display: inline-block; font-size: 12px; font-weight: 600; margin: 10px 0; }
+        .emoji { font-size: 48px; margin-bottom: 16px; }
+        .progress { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+        .dot.active { background: white; width: 20px; border-radius: 4px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="progress">
-                <div class="progress-dot active"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
-                <div class="progress-dot"></div>
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
             <h1>🚀 JB Claw Business</h1>
             <p>Deploy your AI agent in 10 minutes</p>
         </div>
 
         <div class="content">
-            <!-- Step 0: Welcome -->
+            <!-- Step 1: Welcome -->
             <div class="step active">
                 <div class="emoji">👋</div>
                 <h2>Welcome!</h2>
-                <p>Let's set up your AI agent. This will take about <strong>10 minutes</strong>.</p>
-                <p style="font-size: 13px; color: #999;">We'll walk you through every step. No coding required!</p>
-                
-                <div class="step-indicator">
-                    <span class="step-number">What you'll do:</span><br>
-                    1. Clone the repository<br>
-                    2. Customize your agent<br>
-                    3. Add API keys<br>
-                    4. Start your agent<br>
-                    5. Done! Your agent is live
+                <p>Let's set up your AI agent. This takes about 10 minutes.</p>
+                <div class="box info-box">
+                    <strong>What you'll do:</strong><br>
+                    1. Clone repository<br>
+                    2. Run setup scripts<br>
+                    3. Configure your agent<br>
+                    4. Choose a platform<br>
+                    5. Add API keys<br>
+                    6. Done! Live agent
                 </div>
-
-                <div style="margin-top: 30px;">
-                    <button class="btn-primary" onclick="nextStep()">Let's Start →</button>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="next()">Get Started →</button>
                 </div>
             </div>
 
-            <!-- Step 1: Clone Repository -->
+            <!-- Step 2: Clone -->
             <div class="step">
                 <div class="emoji">📥</div>
-                <h2>Step 1: Download the Code</h2>
-                <p>We'll clone the jbclaw-business repository.</p>
-
-                <div class="diagram">
-                    <div class="diagram-title">📱 Open your Terminal</div>
-                    <div class="diagram-icon">💻</div>
-                    <p>Mac: Use Spotlight search for "Terminal"<br>
-                    Windows: Press Windows + R, type "cmd"<br>
-                    Linux: Use your terminal app</p>
-                </div>
-
-                <p style="margin-top: 20px; font-weight: 600;">Copy this command:</p>
-                <div class="code-block">git clone https://github.com/pabukola2/jbclaw-business.git my-agent && cd my-agent</div>
-                <button class="copy-btn" onclick="copyToClipboard(this, 'git clone https://github.com/pabukola2/jbclaw-business.git my-agent && cd my-agent')">📋 Copy Command</button>
-
-                <div class="step-indicator">
-                    <span class="step-number">What this does:</span><br>
-                    Downloads the jbclaw-business code to your computer
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()">Done, Next Step →</button>
-                    </div>
+                <h2>Step 1: Clone Repository</h2>
+                <p>Open your terminal and run:</p>
+                <pre style="background: #1e1e1e; color: #00ff00; padding: 12px; border-radius: 6px; font-size: 11px; overflow-x: auto; margin: 12px 0;">git clone https://github.com/pabukola2/jbclaw-business.git my-agent && cd my-agent</pre>
+                <button style="width: 100%; background: #667eea; color: white; padding: 10px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; margin: 12px 0;" onclick="copyCmd('git clone https://github.com/pabukola2/jbclaw-business.git my-agent && cd my-agent')">📋 Copy Command</button>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prev()">← Back</button>
+                    <button class="btn-primary" onclick="next()">Done →</button>
                 </div>
             </div>
 
-            <!-- Step 2: Run Setup -->
+            <!-- Step 3: Setup -->
             <div class="step">
                 <div class="emoji">⚙️</div>
-                <h2>Step 2: Install Everything</h2>
-                <p>This will install all dependencies your agent needs.</p>
-
-                <p style="margin-top: 20px; font-weight: 600;">In the same terminal, paste:</p>
-                <div class="code-block">./setup.sh</div>
-                <button class="copy-btn" onclick="copyToClipboard(this, './setup.sh')">📋 Copy Command</button>
-
-                <div class="step-indicator">
-                    <span class="step-number">What happens next:</span><br>
-                    • Downloads Python & Node.js packages<br>
-                    • Sets up Ollama AI models<br>
-                    • Configures everything automatically<br>
-                    Takes about 5-10 minutes
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()">Done, Next Step →</button>
-                    </div>
+                <h2>Step 2: Install & Configure</h2>
+                <p>Run the setup script:</p>
+                <pre style="background: #1e1e1e; color: #00ff00; padding: 12px; border-radius: 6px; font-size: 11px; margin: 12px 0;">./setup.sh</pre>
+                <p style="font-size: 12px; color: #666; margin-top: 12px;">Then run the interactive setup:</p>
+                <pre style="background: #1e1e1e; color: #00ff00; padding: 12px; border-radius: 6px; font-size: 11px; margin: 12px 0;">./setup-interactive.sh</pre>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prev()">← Back</button>
+                    <button class="btn-primary" onclick="next()">Next →</button>
                 </div>
             </div>
 
-            <!-- Step 3: Interactive Setup -->
-            <div class="step">
-                <div class="emoji">🎯</div>
-                <h2>Step 3: Configure Your Agent</h2>
-                <p>After setup.sh finishes, run the interactive setup.</p>
-
-                <p style="margin-top: 20px; font-weight: 600;">In the same terminal, paste:</p>
-                <div class="code-block">./setup-interactive.sh</div>
-                <button class="copy-btn" onclick="copyToClipboard(this, './setup-interactive.sh')">📋 Copy Command</button>
-
-                <div class="step-indicator">
-                    <span class="step-number">This wizard will ask:</span><br>
-                    • What's your agent's name?<br>
-                    • How should it behave?<br>
-                    • Which platform? (Telegram/Discord/Slack/WhatsApp)<br>
-                    • Your API keys
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()">Got It, Next →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 4: Agent Name -->
+            <!-- Step 4: Agent Config -->
             <div class="step">
                 <div class="emoji">🤖</div>
-                <h2>Step 4: Name Your Agent</h2>
-                <p>When the wizard asks "What's your agent's name?", you'll type something like:</p>
-
-                <div class="code-block">Sales Bot
-Sales Pro
-Support Hero
-My AI Assistant
-Growth Partner</div>
-
+                <h2>Step 3: Configure Agent</h2>
                 <div class="form-group">
-                    <label>💡 What would you like to call yours?</label>
-                    <input type="text" id="agentName" placeholder="e.g., Sales Bot, Support Pro">
+                    <label>What's your agent's name?</label>
+                    <input type="text" id="agentName" placeholder="e.g., Sales Bot, Support Pro" required>
                 </div>
-
-                <div class="step-indicator">
-                    <span class="step-number">📝 Remember this!</span><br>
-                    Your agent will use this name when it responds to messages
+                <div class="form-group">
+                    <label>How should it behave?</label>
+                    <textarea id="personality" placeholder="e.g., Friendly, professional, solves problems instantly" style="min-height: 80px;"></textarea>
                 </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()" id="nextBtn4">Next →</button>
-                    </div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prev()">← Back</button>
+                    <button class="btn-primary" onclick="next()">Next →</button>
                 </div>
             </div>
 
-            <!-- Step 5: Personality -->
-            <div class="step">
-                <div class="emoji">✨</div>
-                <h2>Step 5: Agent Personality</h2>
-                <p>When the wizard asks "How should it behave?", describe your agent:</p>
-
-                <div class="code-block">Energetic sales pro who closes deals
-Friendly support expert who solves problems
-Creative content strategist
-Professional business consultant</div>
-
-                <div class="form-group">
-                    <label>💡 How should your agent behave?</label>
-                    <textarea id="personality" placeholder="e.g., Friendly, professional support expert who solves customer problems instantly"></textarea>
-                </div>
-
-                <div class="step-indicator">
-                    <span class="step-number">🎭 Personality matters!</span><br>
-                    This determines how your agent responds to messages
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()">Next →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 6: Communication Channel -->
+            <!-- Step 5: Platform -->
             <div class="step">
                 <div class="emoji">💬</div>
-                <h2>Step 6: Choose Platform</h2>
-                <p>When the wizard asks "Which platform?", pick one:</p>
-
-                <div class="options">
-                    <label class="option" onclick="selectChannel('telegram')">
-                        <div class="option-label">
-                            <input type="radio" name="channel" value="telegram">
-                            <div class="option-text">
-                                <div class="option-title">📱 Telegram</div>
-                                <div class="option-desc">Easiest to set up • Most popular</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option" onclick="selectChannel('discord')">
-                        <div class="option-label">
-                            <input type="radio" name="channel" value="discord">
-                            <div class="option-text">
-                                <div class="option-title">🎮 Discord</div>
-                                <div class="option-desc">Perfect for teams • Great for communities</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option" onclick="selectChannel('slack')">
-                        <div class="option-label">
-                            <input type="radio" name="channel" value="slack">
-                            <div class="option-text">
-                                <div class="option-title">💼 Slack</div>
-                                <div class="option-desc">Enterprise • For businesses</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option" onclick="selectChannel('whatsapp')">
-                        <div class="option-label">
-                            <input type="radio" name="channel" value="whatsapp">
-                            <div class="option-text">
-                                <div class="option-title">📲 WhatsApp</div>
-                                <div class="option-desc">Global • Low cost messaging</div>
-                            </div>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="step-indicator">
-                    <span class="step-number">💡 Unsure?</span><br>
-                    Pick <strong>Telegram</strong> if you're not sure. It's easiest to set up!
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()" id="nextBtn6">Next →</button>
-                    </div>
+                <h2>Step 4: Choose Platform</h2>
+                <p>Pick where your agent will live:</p>
+                <div id="channels"></div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prev()">← Back</button>
+                    <button class="btn-primary" onclick="next()">Next →</button>
                 </div>
             </div>
 
-            <!-- Step 7: API Keys -->
+            <!-- Step 6: API KEYS (MAIN ONE) -->
             <div class="step">
                 <div class="emoji">🔑</div>
-                <h2>Step 7: API Keys</h2>
-                <p>The wizard will ask for 2 API keys. Here's where to get them:</p>
+                <h2>Step 5: Get API Keys</h2>
+                <p>You need 2 keys. Let's get them:</p>
 
-                <h3 style="margin-top: 20px; color: #333; font-size: 16px;">1. OpenRouter Key (for AI models)</h3>
-                <ol style="color: #666; font-size: 13px; margin-left: 20px; line-height: 1.8;">
-                    <li>Go to <span class="highlight">https://openrouter.ai/keys</span></li>
-                    <li>Sign in with Google</li>
-                    <li>Click "Create Key"</li>
-                    <li>Name it "jbclaw-business"</li>
-                    <li>Copy the key</li>
-                    <li>Add $10 credit (so your agent can use AI models)</li>
-                </ol>
-
-                <h3 style="margin-top: 20px; color: #333; font-size: 16px;">2. Platform Key (Telegram/Discord/etc)</h3>
-                <p style="font-size: 13px; color: #666; margin-top: 10px;">See the guide for your platform:</p>
-                <ul style="color: #666; font-size: 13px; margin-left: 20px; margin-top: 10px;">
-                    <li><strong>Telegram:</strong> Search @BotFather in Telegram → /newbot</li>
-                    <li><strong>Discord:</strong> Go to developer.discord.com → Create bot</li>
-                    <li><strong>Slack:</strong> Go to api.slack.com/apps → Create app</li>
-                    <li><strong>WhatsApp:</strong> Use Twilio (paid service)</li>
-                </ul>
-
-                <div class="step-indicator" style="margin-top: 20px;">
-                    <span class="step-number">⏱️ Takes 5 minutes</span><br>
-                    Getting API keys is usually quick. The setup wizard will guide you!
+                <div class="box info-box">
+                    <strong>1️⃣ OpenRouter Key (for AI models)</strong>
+                    <p style="margin-top: 8px; font-size: 12px;">Powers your agent's brain with AI models.</p>
+                    <a href="https://openrouter.ai/keys" target="_blank" class="link-btn">🔗 Get OpenRouter Key</a>
                 </div>
 
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="nextStep()">Almost There →</button>
-                    </div>
+                <div class="form-group">
+                    <label>Paste your OpenRouter key:</label>
+                    <input type="password" id="openrouter" placeholder="sk-or-..." style="font-family: monospace;">
+                </div>
+
+                <div class="box info-box">
+                    <strong>2️⃣ Platform Key <span id="platformName">(Telegram/Discord/etc)</span></strong>
+                    <p style="margin-top: 8px; font-size: 12px;">Get this from your chosen platform.</p>
+                    <a href="" id="platformLink" target="_blank" class="link-btn" style="display: none;">🔗 Setup Guide</a>
+                </div>
+
+                <div class="form-group">
+                    <label>Paste your platform key:</label>
+                    <input type="password" id="platform" placeholder="Your bot token">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prev()">← Back</button>
+                    <button class="btn-primary" onclick="validateKeys()">Verify & Continue →</button>
                 </div>
             </div>
 
-            <!-- Step 8: Final -->
+            <!-- Step 7: Success -->
             <div class="step">
                 <div class="emoji">✅</div>
-                <h2>You're Done! 🎉</h2>
-                <p>After you complete the setup wizard, your agent will be LIVE!</p>
-
-                <div class="status-box">
-                    <h3>✓ Your Agent is Ready</h3>
-                    <p>Start chatting on <span id="finalChannel">your chosen platform</span> to use it immediately</p>
+                <h2>Success!</h2>
+                <p>Your agent is configured and ready to go!</p>
+                <div class="box success-box">
+                    <strong>✓ Configuration Complete</strong>
+                    <p style="margin-top: 8px; font-size: 12px;">Agent: <span id="finalName">Your Agent</span><br>Platform: <span id="finalChannel">Telegram</span></p>
                 </div>
-
-                <h3 style="margin-top: 20px; color: #333; font-size: 16px;">Next Steps:</h3>
-                <ul class="checklist">
-                    <li>✨ Customize your agent's personality (edit SOUL.md)</li>
-                    <li>📝 Add context about your business (edit MEMORY.md)</li>
-                    <li>🚀 Start using it with your team</li>
-                    <li>📈 Scale up to more channels later</li>
-                </ul>
-
-                <div class="step-indicator">
-                    <span class="step-number">💡 Need help?</span><br>
-                    Check out the full docs at:<br>
-                    <span class="highlight" style="display: inline-block; margin-top: 8px;">https://github.com/pabukola2/jbclaw-business</span>
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="prevStep()">← Back</button>
-                        <button class="btn-primary" onclick="location.reload()">Start Over</button>
-                    </div>
+                <p style="font-size: 12px; margin: 16px 0;">Your agent will be LIVE in ~10 minutes after running the setup scripts!</p>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="location.reload()">Start Over</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentStep = 0;
+        let step = 0;
         const steps = document.querySelectorAll('.step');
-        const progressDots = document.querySelectorAll('.progress-dot');
+        const dots = document.querySelectorAll('.dot');
+        let selectedChannel = 'telegram';
 
-        function showStep(n) {
-            steps.forEach(step => step.classList.remove('active'));
+        function show(n) {
+            steps.forEach(s => s.classList.remove('active'));
             steps[n].classList.add('active');
-            
-            progressDots.forEach((dot, i) => {
-                dot.classList.toggle('active', i <= n);
-            });
-
-            document.querySelectorAll('.btn-secondary').forEach(btn => {
-                btn.style.display = n === 0 ? 'none' : 'block';
-            });
-
-            currentStep = n;
+            dots.forEach((d, i) => d.classList.toggle('active', i <= n));
+            step = n;
             window.scrollTo(0, 0);
+
+            // Update platform guide on step 5
+            if (n === 5) {
+                updatePlatformGuide();
+            }
         }
 
-        function nextStep() {
-            if (currentStep === 4 && !document.getElementById('agentName').value) {
-                alert('Please enter an agent name');
+        function next() {
+            if (step < steps.length - 1) show(step + 1);
+        }
+
+        function prev() {
+            if (step > 0) show(step - 1);
+        }
+
+        function updatePlatformGuide() {
+            const guides = {
+                telegram: { name: 'Telegram', url: '/setup/telegram' },
+                discord: { name: 'Discord', url: '/setup/discord' },
+                slack: { name: 'Slack', url: '/setup/slack' },
+                whatsapp: { name: 'WhatsApp', url: '/setup/whatsapp' }
+            };
+            const guide = guides[selectedChannel] || guides.telegram;
+            document.getElementById('platformName').textContent = `(${guide.name})`;
+            document.getElementById('platformLink').href = guide.url;
+            document.getElementById('platformLink').textContent = `🔗 ${guide.name} Setup Guide`;
+            document.getElementById('platformLink').style.display = 'inline-block';
+        }
+
+        function validateKeys() {
+            const openrouter = document.getElementById('openrouter').value.trim();
+            const platform = document.getElementById('platform').value.trim();
+            const agentName = document.getElementById('agentName').value.trim() || 'Your Agent';
+
+            if (!openrouter || !platform) {
+                alert('Please paste both API keys');
                 return;
             }
-            if (currentStep === 5 && !document.getElementById('personality').value) {
-                alert('Please describe your agent personality');
-                return;
-            }
-            if (currentStep === 6 && !document.querySelector('input[name="channel"]:checked')) {
-                alert('Please select a communication platform');
+
+            if (openrouter.length < 10) {
+                alert('OpenRouter key looks incomplete');
                 return;
             }
 
-            if (currentStep === 7) return;
-            
-            if (currentStep === 6) {
-                const channel = document.querySelector('input[name="channel"]:checked').value;
-                document.getElementById('finalChannel').textContent = channel.charAt(0).toUpperCase() + channel.slice(1);
-            }
-            
-            showStep(currentStep + 1);
+            // Show final screen with config
+            document.getElementById('finalName').textContent = agentName;
+            document.getElementById('finalChannel').textContent = selectedChannel.charAt(0).toUpperCase() + selectedChannel.slice(1);
+
+            show(6);
         }
 
-        function prevStep() {
-            if (currentStep === 0) return;
-            showStep(currentStep - 1);
-        }
-
-        function selectChannel(channel) {
-            document.querySelector(`input[value="${channel}"]`).checked = true;
-            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-        }
-
-        function copyToClipboard(btn, text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const oldText = btn.textContent;
-                btn.textContent = '✓ Copied!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = oldText;
-                    btn.classList.remove('copied');
-                }, 2000);
+        function copyCmd(cmd) {
+            navigator.clipboard.writeText(cmd).then(() => {
+                alert('✓ Copied to clipboard!');
             });
         }
 
-        showStep(0);
+        // Initialize channels
+        document.getElementById('channels').innerHTML = `
+            <div style="display: grid; gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; transition: all 0.3s;">
+                    <input type="radio" name="channel" value="telegram" checked onchange="selectedChannel='telegram'"> 
+                    <div>
+                        <strong style="color: #333;">📱 Telegram</strong>
+                        <div style="font-size: 12px; color: #666;">Easiest • Most popular</div>
+                    </div>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                    <input type="radio" name="channel" value="discord" onchange="selectedChannel='discord'"> 
+                    <div>
+                        <strong style="color: #333;">🎮 Discord</strong>
+                        <div style="font-size: 12px; color: #666;">Teams • Communities</div>
+                    </div>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                    <input type="radio" name="channel" value="slack" onchange="selectedChannel='slack'"> 
+                    <div>
+                        <strong style="color: #333;">💼 Slack</strong>
+                        <div style="font-size: 12px; color: #666;">Enterprise</div>
+                    </div>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                    <input type="radio" name="channel" value="whatsapp" onchange="selectedChannel='whatsapp'"> 
+                    <div>
+                        <strong style="color: #333;">📲 WhatsApp</strong>
+                        <div style="font-size: 12px; color: #666;">Global • Low cost</div>
+                    </div>
+                </label>
+            </div>
+        `;
     </script>
 </body>
 </html>
