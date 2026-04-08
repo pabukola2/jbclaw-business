@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bot Setup - Interactive Guide</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .content { padding: 40px 30px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        h2 { font-size: 24px; color: #333; margin-bottom: 20px; }
+        p { color: #666; font-size: 14px; line-height: 1.8; margin-bottom: 15px; }
+        .button-group { display: flex; gap: 12px; margin-top: 30px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; flex: 2; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .emoji { font-size: 48px; margin-bottom: 16px; }
+        .link-button { background: #25d366; color: white; padding: 10px; border-radius: 6px; text-decoration: none; display: inline-block; }
+        .status-box { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 8px; padding: 20px; text-align: center; }
+        .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 6px; margin: 16px 0; font-size: 13px; color: #92400e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📲 WhatsApp Bot Setup</h1>
+            <p>Get your Twilio credentials in 10 minutes</p>
+        </div>
+        <div class="content">
+            <div class="step active">
+                <div class="emoji">👋</div>
+                <h2>Welcome!</h2>
+                <p>WhatsApp bots run through Twilio (a messaging service).</p>
+                <div class="warning">
+                    <strong>⚠️ Note:</strong> WhatsApp requires a Twilio account. You get $15 free to test!
+                </div>
+                <ol style="margin-left: 20px; color: #666; font-size: 13px;">
+                    <li>Sign up for Twilio</li>
+                    <li>Set up WhatsApp Sandbox</li>
+                    <li>Get your credentials</li>
+                    <li>Copy them back to wizard</li>
+                </ol>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="nextStep()">Start →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">🌐</div>
+                <h2>Step 1: Sign Up Twilio</h2>
+                <p>Create a free Twilio account:</p>
+                <a href="https://www.twilio.com/try-twilio" target="_blank" class="link-button" style="display: block; text-align: center; margin: 20px 0;">Sign Up for Twilio (Free)</a>
+                <p style="font-size: 13px; color: #666;">You get $15 free credit!</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">📱</div>
+                <h2>Step 2: Setup WhatsApp</h2>
+                <p>In Twilio Console, go to WhatsApp Sandbox:</p>
+                <p style="font-size: 13px; background: #f5f5f5; padding: 12px; border-radius: 6px;">Messaging → WhatsApp → Try it out</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">🔑</div>
+                <h2>Step 3: Get Credentials</h2>
+                <p>From Twilio, copy these 3 things:</p>
+                <ol style="margin-left: 20px; color: #666; font-size: 13px;">
+                    <li>Twilio Phone Number (e.g., +1 415-523-8886)</li>
+                    <li>Account SID</li>
+                    <li>Auth Token</li>
+                </ol>
+                <p style="font-size: 13px; margin-top: 12px;">Find these in Twilio Console → Account Settings</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">✅</div>
+                <h2>Step 4: Paste Credentials</h2>
+                <p>Go back to setup wizard and paste:</p>
+                <ol style="margin-left: 20px; color: #666; font-size: 13px;">
+                    <li>Twilio SID</li>
+                    <li>Auth Token</li>
+                    <li>WhatsApp Phone Number</li>
+                </ol>
+                <div class="status-box">
+                    <h3>✓ Ready!</h3>
+                    <p>Go back and continue setup.</p>
+                </div>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="window.history.back()">← Back to Wizard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let step = 0;
+        function nextStep() { if(step < 4) { step++; update(); } }
+        function prevStep() { if(step > 0) { step--; update(); } }
+        function update() { document.querySelectorAll('.step').forEach((s,i) => s.classList.toggle('active', i === step)); }
+    </script>
+</body>
+</html>

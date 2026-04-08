@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Bot Setup - Interactive Guide</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #36c5f0 0%, #4a148c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, #36c5f0 0%, #4a148c 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .content { padding: 40px 30px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        h2 { font-size: 24px; color: #333; margin-bottom: 20px; }
+        p { color: #666; font-size: 14px; line-height: 1.8; margin-bottom: 15px; }
+        .button-group { display: flex; gap: 12px; margin-top: 30px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #36c5f0 0%, #4a148c 100%); color: white; flex: 2; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .emoji { font-size: 48px; margin-bottom: 16px; }
+        .link-button { background: #36c5f0; color: white; padding: 10px; border-radius: 6px; text-decoration: none; display: inline-block; }
+        .status-box { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Slack Bot Setup</h1>
+            <p>Get your bot token in 5 minutes</p>
+        </div>
+        <div class="content">
+            <div class="step active">
+                <div class="emoji">👋</div>
+                <h2>Let's Setup Your Slack Bot!</h2>
+                <p>Simple 5-step process to get your token ready.</p>
+                <ol style="margin-left: 20px; color: #666; font-size: 13px;">
+                    <li>Go to Slack API site</li>
+                    <li>Create new app</li>
+                    <li>Add bot scopes</li>
+                    <li>Install to workspace</li>
+                    <li>Copy your token</li>
+                </ol>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="nextStep()">Start →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">🌐</div>
+                <h2>Step 1: Open Slack API</h2>
+                <p>Click below to go to Slack API:</p>
+                <a href="https://api.slack.com/apps" target="_blank" class="link-button" style="display: block; text-align: center; margin: 20px 0;">Open Slack API</a>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">📋</div>
+                <h2>Step 2: Create App</h2>
+                <p>Click "Create New App" → "From scratch"</p>
+                <p style="font-size: 13px; background: #f5f5f5; padding: 12px; border-radius: 6px;">Name: Your agent name<br>Workspace: Your Slack workspace</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">⚙️</div>
+                <h2>Step 3: Add Scopes</h2>
+                <p>Go to "OAuth & Permissions"</p>
+                <p style="font-size: 13px; background: #f5f5f5; padding: 12px; border-radius: 6px;">Add scopes:<br>• chat:write<br>• app_mentions:read</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">🚀</div>
+                <h2>Step 4: Install & Copy Token</h2>
+                <p>Click "Install to Workspace"</p>
+                <p style="font-size: 13px; background: #f5f5f5; padding: 12px; border-radius: 6px;">Copy: Bot User OAuth Token</p>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Done →</button>
+                </div>
+            </div>
+            <div class="step">
+                <div class="emoji">✅</div>
+                <h2>All Set!</h2>
+                <div class="status-box">
+                    <h3>✓ Token Ready</h3>
+                    <p>Go back and paste your token to continue.</p>
+                </div>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="window.history.back()">← Back to Wizard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let step = 0;
+        function nextStep() { if(step < 4) { step++; update(); } }
+        function prevStep() { if(step > 0) { step--; update(); } }
+        function update() { document.querySelectorAll('.step').forEach((s,i) => s.classList.toggle('active', i === step)); }
+    </script>
+</body>
+</html>
